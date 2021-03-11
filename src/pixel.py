@@ -7,3 +7,6 @@ class Pixel:
 
     def get_loc(self):
         return self.loc
+
+    def get_color(self):
+        return self.color
