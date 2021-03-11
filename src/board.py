@@ -12,8 +12,6 @@ class Board:
 
     def _render_blocks(self):
         for i in range(len(self.board)):
-            pygame.draw.line(self.surface, (255,255,255), (self.initX, self.initY+i*self.size),
-                             (self.initX+self.rows*self.size, self.initY+i*self.size))
             for j in range(len(self.board[0])):
                 pygame.draw.rect(self.surface, self.board[i][j],
                                  (self.initX+j*self.size, self.initY+i*self.size,
