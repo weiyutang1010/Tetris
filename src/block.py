@@ -13,6 +13,12 @@ class Block:
     def get_size(self):
         return self.size
 
+    def get_loc_center(self):
+        return self.loc_center
+
+    def set_loc_center(self, x, y):
+        self.loc_center = [x, y]
+
 class Z_shape(Block):
     def __init__(self):
         self.color = (50,205,50)
