@@ -1,4 +1,5 @@
 import pygame
+import block
 
 class Board:
     def __init__(self, rows, cols, size, surface, initX, initY):
@@ -9,6 +10,10 @@ class Board:
         self.surface = surface
         self.initX = initX
         self.initY = initY
+
+    def place_block(self, block, x, y):
+        for i, j in block.get_shape():
+            self.board[x + i][y + j] = block.get_color()
 
     def _render_blocks(self):
         for i in range(len(self.board)):
@@ -24,7 +29,6 @@ class Board:
             for j in range(len(self.board[0])):
                 pygame.draw.line(self.surface, (255,255,255), (self.initX+j*self.size, self.initY),
                                  (self.initX+j*self.size, self.initY+self.rows*self.size))
-
 
     def render_all(self):
         self._render_blocks()
