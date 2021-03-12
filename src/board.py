@@ -3,6 +3,18 @@ import block
 
 class Board:
     def __init__(self, rows, cols, size, surface, initX, initY):
+        """
+            rows: int
+                the number of rows
+            cols: int
+                the number of columns
+            size: int
+                size of each block
+            board: 2d list of tuple
+                board[i][j] contains the color of the board
+            surface: pygame object
+
+        """
         self.rows = rows
         self.cols = cols
         self.size = size
@@ -11,16 +23,15 @@ class Board:
         self.initX = initX
         self.initY = initY
         self.curr_block = block.Block()
-        self.blocks = []
 
     def place_block(self, block, x, y):
+        """Place the center of the block at (x, y)"""
         block.set_loc_center(x, y)
-        self.blocks.append(block)
         self.curr_block = block
         for i, j in block.get_shape():
             self.board[x + i][y + j] = block.get_color()
 
-    def reset_block(self):
+    def reset_curr_block(self):
         block = self.curr_block
         x, y = block.get_loc_center()
         for i, j in block.get_shape():
@@ -50,7 +61,17 @@ class Board:
         x, y = self.curr_block.get_loc_center()
 
         if x + i >= 0 and x + i < self.rows and y + j >= 0 and y + j < self.cols:
-            self.reset_block()
+            self.reset_curr_block()
+            self.curr_block.set_loc_center(x + i, y + j)
+            self.place_block(block, x + i, y + j)
+
+    def move_curr_block_down(self):
+        block = self.curr_block
+        x, y = self.curr_block.get_loc_center()
+        i, j = 1, 0
+
+        if x + i >= 0 and x + i < self.rows and y + j >= 0 and y + j < self.cols:
+            self.reset_curr_block()
             self.curr_block.set_loc_center(x + i, y + j)
             self.place_block(block, x + i, y + j)
 
