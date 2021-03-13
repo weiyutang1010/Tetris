@@ -87,6 +87,8 @@ class Board:
         --------
             command: str
                 takes in "UP", "DOWN", "LEFT", "RIGHT"
+        --------
+            return true if block reached bottom or stacked on top of another block
         """
         block = self.curr_block
         i, j = self.get_direction(command)

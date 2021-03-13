@@ -31,8 +31,7 @@ gameBoard.place_block(s_block, 3, 2)
 
 # Events
 MOVE_DOWN = USEREVENT + 1
-my_event = pygame.event.Event(MOVE_DOWN, move_down=gameBoard.move_curr_block)
-pygame.time.set_timer(my_event, 400)
+pygame.time.set_timer(MOVE_DOWN, 400)
 
 
 run = True
@@ -45,7 +44,7 @@ while run:
             pygame.display.quit()
             pygame.quit()
         elif event.type == MOVE_DOWN:
-            event.move_down("DOWN")
+            gameBoard.move_curr_block("DOWN")
 
     keys_pressed = pygame.key.get_pressed()
     if keys_pressed[pygame.K_UP]:
