@@ -31,7 +31,7 @@ gameBoard.place_block(s_block, 3, 2)
 
 # Events
 MOVE_DOWN = USEREVENT + 1
-my_event = pygame.event.Event(MOVE_DOWN, move_down=gameBoard.move_curr_block_down)
+my_event = pygame.event.Event(MOVE_DOWN, move_down=gameBoard.move_curr_block)
 pygame.time.set_timer(my_event, 400)
 
 
@@ -45,15 +45,17 @@ while run:
             pygame.display.quit()
             pygame.quit()
         elif event.type == MOVE_DOWN:
-            event.move_down()
+            event.move_down("DOWN")
 
     keys_pressed = pygame.key.get_pressed()
-    if keys_pressed[pygame.K_LEFT]:
+    if keys_pressed[pygame.K_UP]:
+        gameBoard.rotate_curr_block()
+    elif keys_pressed[pygame.K_DOWN]:
+        gameBoard.move_curr_block("DOWN")
+    elif keys_pressed[pygame.K_LEFT]:
         gameBoard.move_curr_block("LEFT")
     elif keys_pressed[pygame.K_RIGHT]:
         gameBoard.move_curr_block("RIGHT")
-    elif keys_pressed[pygame.K_DOWN]:
-        gameBoard.move_curr_block("DOWN")
     elif keys_pressed[pygame.K_ESCAPE]:
         run = False
         pygame.display.quit()
