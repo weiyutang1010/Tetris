@@ -82,7 +82,12 @@ class Board:
             return (0, 1)
 
     def move_curr_block(self, command):
-        """Move current block to provided direction"""
+        """
+        Move current block to the provided direction
+        --------
+            command: str
+                takes in "UP", "DOWN", "LEFT", "RIGHT"
+        """
         block = self.curr_block
         i, j = self.get_direction(command)
         x, y = self.curr_block.get_loc_center()
@@ -96,7 +101,11 @@ class Board:
             self.curr_block.set_loc_center(x + i, y + j) # Update center location
             self.place_block(block, x + i, y + j) # Render new block
 
-    def move_curr_block_down(self):
-        """Move current block down"""
-        self.move_curr_block("DOWN")
+    def rotate_curr_block(self):
+        block = self.curr_block
+        x, y = self.curr_block.get_loc_center()
+
+        self.reset_curr_block()
+        block.rotate()
+        self.place_block(block, x, y)
 
