@@ -13,7 +13,13 @@ class Board:
             board: 2d list of tuple
                 board[i][j] contains the color of the board
             surface: pygame object
-                surface 
+                surface for drawing lines and board
+            initX: int
+                ?
+            initY: int
+                ?
+            curr_block: class Block
+                user control block
         """
         self.rows = rows
         self.cols = cols
@@ -28,16 +34,22 @@ class Board:
         """Place the center of the block at (x, y)"""
         block.set_loc_center(x, y)
         self.curr_block = block
+
+        # Fill in color of the given block
         for i, j in block.get_shape():
             self.board[x + i][y + j] = block.get_color()
 
     def reset_curr_block(self):
+        """Remove current block from the board"""
         block = self.curr_block
         x, y = block.get_loc_center()
+
+        # Set color to black
         for i, j in block.get_shape():
             self.board[x + i][y + j] = (0, 0, 0)
 
     def _render_blocks(self):
+        """???"""
         for i in range(len(self.board)):
             for j in range(len(self.board[0])):
                 pygame.draw.rect(self.surface, self.board[i][j],
@@ -45,6 +57,7 @@ class Board:
                                    self.size, self.size), 0)
 
     def _render_grid(self):
+        """???"""
         for i in range(len(self.board)):
             pygame.draw.line(self.surface, (255,255,255), (self.initX, self.initY+i*self.size),
                              (self.initX+self.cols*self.size, self.initY+i*self.size))
@@ -53,11 +66,25 @@ class Board:
                                  (self.initX+j*self.size, self.initY+self.rows*self.size))
 
     def render_all(self):
+        """Render board's grid and block"""
         self._render_blocks()
         self._render_grid()
 
-    def move_curr_block(self, i, j):
+    def get_direction(self, command):
+        """Convert direction to i, j indexes"""
+        if command == "UP":
+            return (-1, 0)
+        elif command == "DOWN":
+            return (1, 0)
+        elif command == "LEFT":
+            return (0, -1)
+        elif command == "RIGHT":
+            return (0, 1)
+
+    def move_curr_block(self, command):
+        """Move current block to provided direction"""
         block = self.curr_block
+        i, j = self.get_direction(command)
         x, y = self.curr_block.get_loc_center()
         up, down, left, right = self.curr_block.get_sides() 
 
@@ -65,21 +92,11 @@ class Board:
             x + down + i < self.rows and 
             y - left + j >= 0 and 
             y + right + j < self.cols):
-            self.reset_curr_block()
-            self.curr_block.set_loc_center(x + i, y + j)
-            self.place_block(block, x + i, y + j)
+            self.reset_curr_block() # Remove current block
+            self.curr_block.set_loc_center(x + i, y + j) # Update center location
+            self.place_block(block, x + i, y + j) # Render new block
 
     def move_curr_block_down(self):
-        block = self.curr_block
-        x, y = self.curr_block.get_loc_center()
-        up, down, left, right = self.curr_block.get_sides() 
-        i, j = 1, 0
-
-        if (x - up + i >= 0 and 
-            x + down + i < self.rows and 
-            y - left + j >= 0 and 
-            y + right + j < self.cols):
-            self.reset_curr_block()
-            self.curr_block.set_loc_center(x + i, y + j)
-            self.place_block(block, x + i, y + j)
+        """Move current block down"""
+        self.move_curr_block("DOWN")
 

@@ -26,7 +26,8 @@ lm_block = block.L_shape_mirror()
 t_block = block.T_shape()
 square_block = block.Square_shape()
 line_block = block.Line_shape()
-gameBoard.place_block(t_block, 5, 5)
+gameBoard.place_block(t_block, 7, 4)
+gameBoard.place_block(s_block, 3, 2)
 
 # Events
 MOVE_DOWN = USEREVENT + 1
@@ -48,11 +49,11 @@ while run:
 
     keys_pressed = pygame.key.get_pressed()
     if keys_pressed[pygame.K_LEFT]:
-        gameBoard.move_curr_block(0, -1)
+        gameBoard.move_curr_block("LEFT")
     elif keys_pressed[pygame.K_RIGHT]:
-        gameBoard.move_curr_block(0, 1)
+        gameBoard.move_curr_block("RIGHT")
     elif keys_pressed[pygame.K_DOWN]:
-        gameBoard.move_curr_block(1, 0)
+        gameBoard.move_curr_block("DOWN")
     elif keys_pressed[pygame.K_ESCAPE]:
         run = False
         pygame.display.quit()
