@@ -13,7 +13,7 @@ class Board:
             board: 2d list of tuple
                 board[i][j] contains the color of the board
             surface: pygame object
-
+                surface 
         """
         self.rows = rows
         self.cols = cols
@@ -59,8 +59,12 @@ class Board:
     def move_curr_block(self, i, j):
         block = self.curr_block
         x, y = self.curr_block.get_loc_center()
+        up, down, left, right = self.curr_block.get_sides() 
 
-        if x + i >= 0 and x + i < self.rows and y + j >= 0 and y + j < self.cols:
+        if (x - up + i >= 0 and 
+            x + down + i < self.rows and 
+            y - left + j >= 0 and 
+            y + right + j < self.cols):
             self.reset_curr_block()
             self.curr_block.set_loc_center(x + i, y + j)
             self.place_block(block, x + i, y + j)
@@ -68,9 +72,13 @@ class Board:
     def move_curr_block_down(self):
         block = self.curr_block
         x, y = self.curr_block.get_loc_center()
+        up, down, left, right = self.curr_block.get_sides() 
         i, j = 1, 0
 
-        if x + i >= 0 and x + i < self.rows and y + j >= 0 and y + j < self.cols:
+        if (x - up + i >= 0 and 
+            x + down + i < self.rows and 
+            y - left + j >= 0 and 
+            y + right + j < self.cols):
             self.reset_curr_block()
             self.curr_block.set_loc_center(x + i, y + j)
             self.place_block(block, x + i, y + j)

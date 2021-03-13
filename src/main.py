@@ -19,8 +19,14 @@ FPS = 12
 
 # Initialize Board
 gameBoard = board.Board(15, 10, 40, WIN, 140, 100)
-someBlock = block.Z_shape()
-gameBoard.place_block(someBlock, 5, 5)
+s_block = block.S_shape()
+z_block = block.Z_shape()
+l_block = block.L_shape()
+lm_block = block.L_shape_mirror()
+t_block = block.T_shape()
+square_block = block.Square_shape()
+line_block = block.Line_shape()
+gameBoard.place_block(t_block, 5, 5)
 
 # Events
 MOVE_DOWN = USEREVENT + 1
@@ -35,6 +41,7 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
+            pygame.display.quit()
             pygame.quit()
         elif event.type == MOVE_DOWN:
             event.move_down()
@@ -46,8 +53,10 @@ while run:
         gameBoard.move_curr_block(0, 1)
     elif keys_pressed[pygame.K_DOWN]:
         gameBoard.move_curr_block(1, 0)
-    elif keys_pressed[pygame.K_UP]:
-        gameBoard.move_curr_block(-1, 0)
+    elif keys_pressed[pygame.K_ESCAPE]:
+        run = False
+        pygame.display.quit()
+        pygame.quit()
 
     WIN.fill(WHITE)
     gameBoard.render_all()
