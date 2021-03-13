@@ -22,6 +22,7 @@ class Block:
         return self.loc_center
 
     def get_sides(self):
+        """return the length from the center"""
         sides = [0, 0, 0, 0] # Up, Down, Left, Right
         for i, j in self.get_shape():
             if i < 0:
