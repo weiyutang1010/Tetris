@@ -15,9 +15,9 @@ class Board:
             surface: pygame object
                 surface for drawing lines and board
             initX: int
-                ?
+                board starting x coordinate
             initY: int
-                ?
+                board starting y coordinate
             curr_block: class Block
                 user control block
         """
@@ -49,7 +49,7 @@ class Board:
             self.board[x + i][y + j] = (0, 0, 0)
 
     def _render_blocks(self):
-        """???"""
+        """Render each blocks"""
         for i in range(len(self.board)):
             for j in range(len(self.board[0])):
                 pygame.draw.rect(self.surface, self.board[i][j],
@@ -57,7 +57,7 @@ class Board:
                                    self.size, self.size), 0)
 
     def _render_grid(self):
-        """???"""
+        """Render the grid around each blocks"""
         for i in range(len(self.board)):
             pygame.draw.line(self.surface, (255,255,255), (self.initX, self.initY+i*self.size),
                              (self.initX+self.cols*self.size, self.initY+i*self.size))
