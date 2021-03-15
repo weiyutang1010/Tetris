@@ -36,7 +36,11 @@ while run:
         elif event.type == MOVE_DOWN:
             myGame.gameBoard.move_curr_block("DOWN")
 
-    run = myGame.block_movement()
+    
+    if (myGame.gameBoard.at_bottom()):
+        myGame.drop_random_blocks()
+    else:
+        run = myGame.block_movement()
     
     WIN.fill(WHITE)
     myGame.render_game()
