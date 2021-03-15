@@ -91,10 +91,22 @@ class Board:
                 y + right + j < self.cols)
 
     def not_blocked(self, command):
-        i, j = self.get_direction(command)
-        x, y = self.curr_block.get_loc_center()
-        up, down, left, right = self.curr_block.get_sides()
+        BLACK = (0, 0, 0)
+        COLOR = self.curr_block.get_color()
 
+        block = self.curr_block
+        i, j = self.get_direction(command)
+        x, y = block.get_loc_center()
+
+        coordinates = {}
+        for a, b in block.get_shape():
+            coordinates[(x + a, y + b)] = 1
+
+        for a, b in block.get_shape():
+            if (x + a + i, y + j + b) in coordinates:
+                continue
+            elif  self.board[x + a + i][y + j + b] != BLACK:
+                return False
         return True
 
     def move_curr_block(self, command):
@@ -114,10 +126,7 @@ class Board:
             self.place_block(block, x + i, y + j) # Render new block
 
     def at_bottom(self):
-        i, j = self.get_direction("DOWN")
-        x, y = self.curr_block.get_loc_center()
-        up, down, left, right = self.curr_block.get_sides() 
-        return  x + down + i == self.rows
+        return not self.in_bound("DOWN") or not self.not_blocked("DOWN")
 
     def rotate_curr_block(self):
         block = self.curr_block

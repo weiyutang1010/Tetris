@@ -10,9 +10,9 @@ class Game():
                  block_size=40,
                  board_start=(140,100)
                  ):
-
+        self.board_size = board_size
         self.gameBoard = board.Board(*board_size, block_size, surface, *board_start)
-        self.board_mid = (0, board_size[1]//2)
+        self.board_mid = (1, board_size[1]//2)
         self.blocks = [
             block.S_shape(),
             block.Z_shape(),
@@ -26,7 +26,8 @@ class Game():
     def drop_random_blocks(self):
         count = len(self.blocks)
         choice = random.randint(0, count-1)
-        self.gameBoard.place_block(self.blocks[choice], *self.board_mid)
+        pos = (self.blocks[choice].get_sides()[0], self.board_size[1]//2)
+        self.gameBoard.place_block(self.blocks[choice], *pos)
 
     def block_movement(self):
         keys_pressed = pygame.key.get_pressed()
