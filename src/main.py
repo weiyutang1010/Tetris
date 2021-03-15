@@ -32,7 +32,8 @@ while run:
     clock.tick(FPS)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            run = False
+            pygame.display.quit()
+            pygame.quit()
         elif event.type == MOVE_DOWN:
             myGame.gameBoard.move_curr_block("DOWN")
 
