@@ -34,18 +34,7 @@ MOVE_DOWN = USEREVENT + 1
 pygame.time.set_timer(MOVE_DOWN, 400)
 
 
-run = True
-while run:
-    clock.tick(FPS)
-    
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
-            pygame.display.quit()
-            pygame.quit()
-        elif event.type == MOVE_DOWN:
-            gameBoard.move_curr_block("DOWN")
-
+def get_key():
     keys_pressed = pygame.key.get_pressed()
     if keys_pressed[pygame.K_UP]:
         gameBoard.rotate_curr_block()
@@ -59,6 +48,24 @@ while run:
         run = False
         pygame.display.quit()
         pygame.quit()
+
+run = True
+while run:
+    clock.tick(FPS)
+    
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+            pygame.display.quit()
+            pygame.quit()
+        elif event.type == MOVE_DOWN:
+            gameBoard.move_curr_block("DOWN")
+
+    if (gameBoard.at_bottom()):
+        # Place new block at the top
+        pass
+    else:
+        get_key()
 
     WIN.fill(WHITE)
     gameBoard.render_all()

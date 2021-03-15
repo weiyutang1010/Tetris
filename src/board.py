@@ -81,27 +81,43 @@ class Board:
         elif command == "RIGHT":
             return (0, 1)
 
+    def in_bound(self, command):
+        i, j = self.get_direction(command)
+        x, y = self.curr_block.get_loc_center()
+        up, down, left, right = self.curr_block.get_sides() 
+        return  (x - up + i >= 0 and 
+                x + down + i < self.rows and 
+                y - left + j >= 0 and 
+                y + right + j < self.cols)
+
+    def not_blocked(self, command):
+        i, j = self.get_direction(command)
+        x, y = self.curr_block.get_loc_center()
+        up, down, left, right = self.curr_block.get_sides()
+
+        return True
+
     def move_curr_block(self, command):
         """
         Move current block to the provided direction
         --------
             command: str
                 takes in "UP", "DOWN", "LEFT", "RIGHT"
-        --------
-            return true if block reached bottom or stacked on top of another block
         """
         block = self.curr_block
         i, j = self.get_direction(command)
         x, y = self.curr_block.get_loc_center()
-        up, down, left, right = self.curr_block.get_sides() 
 
-        if (x - up + i >= 0 and 
-            x + down + i < self.rows and 
-            y - left + j >= 0 and 
-            y + right + j < self.cols):
+        if (self.in_bound(command) and self.not_blocked(command)):
             self.reset_curr_block() # Remove current block
             self.curr_block.set_loc_center(x + i, y + j) # Update center location
             self.place_block(block, x + i, y + j) # Render new block
+
+    def at_bottom(self):
+        i, j = self.get_direction("DOWN")
+        x, y = self.curr_block.get_loc_center()
+        up, down, left, right = self.curr_block.get_sides() 
+        return  x + down + i == self.rows
 
     def rotate_curr_block(self):
         block = self.curr_block
