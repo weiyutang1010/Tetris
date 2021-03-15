@@ -37,7 +37,10 @@ while run:
             myGame.gameBoard.move_curr_block("DOWN")
 
     run = myGame.block_movement()
-
+    
+    WIN.fill(WHITE)
+    myGame.render_game()
+    pygame.display.update()
 
 pygame.display.quit()
 pygame.quit()
