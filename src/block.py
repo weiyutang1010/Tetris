@@ -112,6 +112,8 @@ class Square_shape(Block):
             (0, -1),
             (1, -1)
         ]
+    def rotate(self):
+        return
 
 class Line_shape(Block):
     def __init__(self):

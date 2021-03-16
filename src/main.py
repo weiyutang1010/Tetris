@@ -16,7 +16,7 @@ pygame.display.set_caption("Tetris!")
 
 # Pygame FPS
 clock = pygame.time.Clock()
-FPS = 12
+FPS = 8
 
 # Initialize Board
 myGame = game.Game(surface=WIN)
@@ -32,8 +32,7 @@ while run:
     clock.tick(FPS)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            pygame.display.quit()
-            pygame.quit()
+            myGame.quit()
         elif event.type == MOVE_DOWN:
             myGame.gameBoard.move_curr_block("DOWN")
 
@@ -47,5 +46,4 @@ while run:
     myGame.render_game()
     pygame.display.update()
 
-pygame.display.quit()
-pygame.quit()
+myGame.quit()

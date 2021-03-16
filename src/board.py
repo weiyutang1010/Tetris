@@ -80,8 +80,11 @@ class Board:
             return (0, -1)
         elif command == "RIGHT":
             return (0, 1)
+        else:
+            return (0, 0)
 
-    def in_bound(self, command):
+    def in_bound(self, command=""):
+        """Check if moving in the direction causes out of bound"""
         i, j = self.get_direction(command)
         x, y = self.curr_block.get_loc_center()
         up, down, left, right = self.curr_block.get_sides() 
@@ -91,6 +94,7 @@ class Board:
                 y + right + j < self.cols)
 
     def not_blocked(self, command):
+        """Check if the current block is blocked by another color block"""
         BLACK = (0, 0, 0)
         COLOR = self.curr_block.get_color()
 
@@ -129,10 +133,13 @@ class Board:
         return not self.in_bound("DOWN") or not self.not_blocked("DOWN")
 
     def rotate_curr_block(self):
-        block = self.curr_block
         x, y = self.curr_block.get_loc_center()
 
         self.reset_curr_block()
-        block.rotate()
-        self.place_block(block, x, y)
+        self.curr_block.rotate()
+        if not self.in_bound("LEFT"):
+            y += self.curr_block.get_sides()[2]
+        elif not self.in_bound("RIGHT"):
+            y -= self.curr_block.get_sides()[3]
+        self.place_block(self.curr_block, x, y)
 
