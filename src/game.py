@@ -2,6 +2,7 @@ import pygame
 import board
 import block
 import random
+import time
 
 class Game():
     def __init__(self,
@@ -45,4 +46,9 @@ class Game():
 
     def render_game(self):
         self.gameBoard.render_all()
+
+    def quit(self):
+        pygame.display.quit()
+        pygame.quit()
+        quit()
 
