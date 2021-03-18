@@ -27,9 +27,6 @@ class Game():
             block.Line_shape()
         ]
 
-    def display_cur_block__(self):
-        if self.cur_block and self.blockDisplay.at_bottom(): pass
-
     def display_cur_block(self):
         if not self.cur_block: return
         self.blockDisplay.reset_curr_block()
