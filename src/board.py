@@ -138,8 +138,8 @@ class Board:
         self.reset_curr_block()
         self.curr_block.rotate()
         if not self.in_bound("LEFT"):
-            y += self.curr_block.get_sides()[2]
+            y = self.curr_block.get_sides()[2]
         elif not self.in_bound("RIGHT"):
-            y -= self.curr_block.get_sides()[3]
+            y = self.cols - self.curr_block.get_sides()[3] - 1
         self.place_block(self.curr_block, x, y)
 
