@@ -10,7 +10,7 @@ WHITE = (255, 255, 255)
 
 # Pygame Window
 pygame.init()
-WIDTH, HEIGHT = 680, 920
+WIDTH, HEIGHT = 880, 800
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Tetris!")
 
