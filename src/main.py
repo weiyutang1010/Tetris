@@ -16,7 +16,7 @@ pygame.display.set_caption("Tetris!")
 
 # Pygame FPS
 clock = pygame.time.Clock()
-FPS = 8
+FPS = 12
 
 # Initialize Board
 myGame = game.Game(surface=WIN)
@@ -35,7 +35,6 @@ while run:
             myGame.quit()
         elif event.type == MOVE_DOWN:
             myGame.gameBoard.move_curr_block("DOWN")
-
     
     if (myGame.gameBoard.at_bottom()):
         myGame.drop_random_blocks()
