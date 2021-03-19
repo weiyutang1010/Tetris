@@ -71,7 +71,19 @@ class Board:
         self._render_grid()
 
     def get_direction(self, command):
-        """Convert direction to i, j indexes"""
+        """Convert direction to i, j indexes
+    
+        Parameters
+        -----------
+            command: str, optional
+                takes in "UP", "DOWN", "LEFT", "RIGHT" (default check 
+                current position)
+
+        Returns
+        --------
+            1 x 2 tuple
+                return corresponding coordinates of the command
+        """
         if command == "UP":
             return (-1, 0)
         elif command == "DOWN":
@@ -84,7 +96,20 @@ class Board:
             return (0, 0)
 
     def in_bound(self, command=""):
-        """Check if moving in the direction causes out of bound"""
+        """Check if moving in the direction causes out of bound
+
+        Parameters
+        -----------
+            command: str, optional
+                takes in "UP", "DOWN", "LEFT", "RIGHT" (default check 
+                current position)
+
+        Returns
+        --------
+            boolean
+                True if moving in given direction does not cause out of bound
+                False otherwise
+        """
         i, j = self.get_direction(command)
         x, y = self.curr_block.get_loc_center()
         up, down, left, right = self.curr_block.get_sides() 
@@ -114,9 +139,10 @@ class Board:
         return True
 
     def move_curr_block(self, command):
-        """
-        Move current block to the provided direction
-        --------
+        """Move current block to the provided direction
+
+        Parameters
+        -----------
             command: str
                 takes in "UP", "DOWN", "LEFT", "RIGHT"
         """
@@ -130,16 +156,21 @@ class Board:
             self.place_block(block, x + i, y + j) # Render new block
 
     def at_bottom(self):
+        """Check if the block can still fall"""
         return not self.in_bound("DOWN") or not self.not_blocked("DOWN")
 
     def rotate_curr_block(self):
+        """Rotate current block 90 deg clockwise"""
         x, y = self.curr_block.get_loc_center()
 
         self.reset_curr_block()
         self.curr_block.rotate()
+
+        # To avoid out of bound, block will be shifted left or right
         if not self.in_bound("LEFT"):
             y = self.curr_block.get_sides()[2]
         elif not self.in_bound("RIGHT"):
             y = self.cols - self.curr_block.get_sides()[3] - 1
+
         self.place_block(self.curr_block, x, y)
 

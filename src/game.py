@@ -29,6 +29,10 @@ class Game():
         self.last_time = 0
         self.interval = 1.6E8
 
+        self.flag = False
+        self.bottom_time = 0
+        self.bottom_interval = 3E8
+
     def display_cur_block(self):
         if not self.cur_block: return
         self.blockDisplay.reset_curr_block()
@@ -52,7 +56,7 @@ class Game():
             if keys_pressed[pygame.K_UP]:
                 self.gameBoard.rotate_curr_block()
                 self.last_time = time.time_ns()
-            elif keys_pressed[pygame.K_DOWN]:
+            elif keys_pressed[pygame.K_DOWN] and self.gameBoard.in_bound():
                 self.gameBoard.move_curr_block("DOWN")
                 self.last_time = time.time_ns()
             elif keys_pressed[pygame.K_LEFT]:
@@ -64,6 +68,17 @@ class Game():
             elif keys_pressed[pygame.K_ESCAPE]:
                 return False
         return True
+    
+    def block_at_bottom(self):
+        if self.gameBoard.at_bottom():
+            if self.flag:
+                if time.time_ns() > self.bottom_time + self.bottom_interval:
+                    self.flag = False
+                    return True
+            else:
+                self.flag = True
+                self.bottom_time = time.time_ns()
+        return False
 
     def render_game(self):
         self.blockDisplay._render_blocks()
