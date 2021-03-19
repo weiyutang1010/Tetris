@@ -132,7 +132,13 @@ class Game():
         return False
 
     def remove_full_lines(self):
-        """If a line is full, render the row black"""
+        """Clear lines that are full
+        
+        Return
+        ---------
+            int
+                number of lines that are cleared
+        """
         BLACK = (0, 0, 0)
         line_count = 0
 
