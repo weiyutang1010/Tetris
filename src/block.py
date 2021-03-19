@@ -43,7 +43,7 @@ class Block:
         # Update shape
         for i, coor in enumerate(self.shape):
             y, x = coor
-            x *= -1
+            y *= -1
             self.shape[i] = (x, y)
 
 

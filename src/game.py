@@ -26,6 +26,8 @@ class Game():
             block.Square_shape(),
             block.Line_shape()
         ]
+        self.last_time = 0
+        self.interval = 1.6E8
 
     def display_cur_block(self):
         if not self.cur_block: return
@@ -45,17 +47,22 @@ class Game():
         self.display_cur_block()
 
     def block_movement(self):
-        keys_pressed = pygame.key.get_pressed()
-        if keys_pressed[pygame.K_UP]:
-            self.gameBoard.rotate_curr_block()
-        elif keys_pressed[pygame.K_DOWN]:
-            self.gameBoard.move_curr_block("DOWN")
-        elif keys_pressed[pygame.K_LEFT]:
-            self.gameBoard.move_curr_block("LEFT")
-        elif keys_pressed[pygame.K_RIGHT]:
-            self.gameBoard.move_curr_block("RIGHT")
-        elif keys_pressed[pygame.K_ESCAPE]:
-            return False
+        if time.time_ns() > self.last_time + self.interval:
+            keys_pressed = pygame.key.get_pressed()
+            if keys_pressed[pygame.K_UP]:
+                self.gameBoard.rotate_curr_block()
+                self.last_time = time.time_ns()
+            elif keys_pressed[pygame.K_DOWN]:
+                self.gameBoard.move_curr_block("DOWN")
+                self.last_time = time.time_ns()
+            elif keys_pressed[pygame.K_LEFT]:
+                self.gameBoard.move_curr_block("LEFT")
+                self.last_time = time.time_ns()
+            elif keys_pressed[pygame.K_RIGHT]:
+                self.gameBoard.move_curr_block("RIGHT")
+                self.last_time = time.time_ns()
+            elif keys_pressed[pygame.K_ESCAPE]:
+                return False
         return True
 
     def render_game(self):
