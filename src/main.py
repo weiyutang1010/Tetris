@@ -1,8 +1,6 @@
 import pygame
 import os
 from pygame.constants import USEREVENT
-import board
-import block
 import game
 
 # Color Constant
@@ -27,19 +25,20 @@ pygame.time.set_timer(MOVE_DOWN, 350)
 
 
 run = True
-myGame.drop_random_blocks()
+myGame.drop_random_shape()
 while run:
     clock.tick(FPS)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             myGame.quit()
         elif event.type == MOVE_DOWN:
-            myGame.gameBoard.move_curr_block("DOWN")
+            myGame.gameBoard.move_curr_shape("DOWN")
     
-    if (myGame.block_at_bottom()):
-        myGame.drop_random_blocks()
+    if (myGame.shape_at_bottom()):
+        myGame.remove_full_lines()
+        myGame.drop_random_shape()
     else:
-        run = myGame.block_movement()
+        run = myGame.shape_movement()
     
     WIN.fill(WHITE)
     myGame.render_game()

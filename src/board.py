@@ -1,7 +1,28 @@
 import pygame
-import block
+import shape
 
 class Board:
+    """A class used to represent the board
+
+    Attributes
+    ----------
+        rows: int
+            the number of rows
+        cols: int
+            the number of columns
+        size: int
+            size of each block
+        board: 2d list of tuple
+            board[i][j] contains the color of the board
+        surface: pygame object
+            surface for drawing lines and board
+        initX: int
+            board starting x coordinate
+        initY: int
+            board starting y coordinate
+        curr_shape: class Shape
+            user control shape
+    """
     def __init__(self, rows, cols, size, surface, initX, initY):
         """
             rows: int
@@ -9,17 +30,13 @@ class Board:
             cols: int
                 the number of columns
             size: int
-                size of each block
-            board: 2d list of tuple
-                board[i][j] contains the color of the board
+                size of each block on the board
             surface: pygame object
                 surface for drawing lines and board
             initX: int
                 board starting x coordinate
             initY: int
                 board starting y coordinate
-            curr_block: class Block
-                user control block
         """
         self.rows = rows
         self.cols = cols
@@ -28,24 +45,24 @@ class Board:
         self.surface = surface
         self.initX = initX
         self.initY = initY
-        self.curr_block = block.Block()
+        self.curr_shape = shape.Shape()
 
-    def place_block(self, block, x, y):
-        """Place the center of the block at (x, y)"""
-        block.set_loc_center(x, y)
-        self.curr_block = block
+    def place_shape(self, shape, x, y):
+        """Place the center of the shape at (x, y)"""
+        shape.set_loc_center(x, y)
+        self.curr_shape = shape
 
-        # Fill in color of the given block
-        for i, j in block.get_shape():
-            self.board[x + i][y + j] = block.get_color()
+        # Fill in color of the given shape
+        for i, j in shape.get_shape():
+            self.board[x + i][y + j] = shape.get_color()
 
-    def reset_curr_block(self):
-        """Remove current block from the board"""
-        block = self.curr_block
-        x, y = block.get_loc_center()
+    def reset_curr_shape(self):
+        """Remove current shape from the board"""
+        shape = self.curr_shape
+        x, y = shape.get_loc_center()
 
         # Set color to black
-        for i, j in block.get_shape():
+        for i, j in shape.get_shape():
             self.board[x + i][y + j] = (0, 0, 0)
 
     def _render_blocks(self):
@@ -104,73 +121,87 @@ class Board:
                 takes in "UP", "DOWN", "LEFT", "RIGHT" (default check 
                 current position)
 
-        Returns
+        Return
         --------
             boolean
                 True if moving in given direction does not cause out of bound
                 False otherwise
         """
         i, j = self.get_direction(command)
-        x, y = self.curr_block.get_loc_center()
-        up, down, left, right = self.curr_block.get_sides() 
+        x, y = self.curr_shape.get_loc_center()
+        up, down, left, right = self.curr_shape.get_sides() 
         return  (x - up + i >= 0 and 
                 x + down + i < self.rows and 
                 y - left + j >= 0 and 
                 y + right + j < self.cols)
 
     def not_blocked(self, command):
-        """Check if the current block is blocked by another color block"""
+        """ Check if the current shape is blocked by another 
+            shape in the specified direction
+
+        Parameters
+        -----------
+            command: str
+                takes in "UP", "DOWN", "LEFT", "RIGHT"
+        
+        Return
+        -----------
+            boolean
+                True if the shape is not blocked by another shape.
+                False otherwise.
+        """
         BLACK = (0, 0, 0)
-        COLOR = self.curr_block.get_color()
 
-        block = self.curr_block
+        shape = self.curr_shape
         i, j = self.get_direction(command)
-        x, y = block.get_loc_center()
+        x, y = shape.get_loc_center()
 
+        # Find all coordinates of the current shape
         coordinates = {}
-        for a, b in block.get_shape():
+        for a, b in shape.get_shape():
             coordinates[(x + a, y + b)] = 1
 
-        for a, b in block.get_shape():
+        for a, b in shape.get_shape():
             if (x + a + i, y + j + b) in coordinates:
+                # skip if the coordinate is part of current shape
                 continue
             elif  self.board[x + a + i][y + j + b] != BLACK:
                 return False
         return True
 
-    def move_curr_block(self, command):
-        """Move current block to the provided direction
+    def move_curr_shape(self, command):
+        """Move current shape to the provided direction
 
         Parameters
         -----------
             command: str
                 takes in "UP", "DOWN", "LEFT", "RIGHT"
         """
-        block = self.curr_block
+        shape = self.curr_shape
         i, j = self.get_direction(command)
-        x, y = self.curr_block.get_loc_center()
+        x, y = self.curr_shape.get_loc_center()
 
         if (self.in_bound(command) and self.not_blocked(command)):
-            self.reset_curr_block() # Remove current block
-            self.curr_block.set_loc_center(x + i, y + j) # Update center location
-            self.place_block(block, x + i, y + j) # Render new block
+            self.reset_curr_shape() # Remove current shape
+            self.curr_shape.set_loc_center(x + i, y + j) # Update center location
+            self.place_shape(shape, x + i, y + j) # Render new shape
 
     def at_bottom(self):
-        """Check if the block can still fall"""
+        """Check if the shape can still move bottom"""
         return not self.in_bound("DOWN") or not self.not_blocked("DOWN")
 
-    def rotate_curr_block(self):
-        """Rotate current block 90 deg clockwise"""
-        x, y = self.curr_block.get_loc_center()
+    def rotate_curr_shape(self):
+        """Rotate current shape 90 deg clockwise"""
+        x, y = self.curr_shape.get_loc_center()
 
-        self.reset_curr_block()
-        self.curr_block.rotate()
+        self.reset_curr_shape()
+        self.curr_shape.rotate()
 
-        # To avoid out of bound, block will be shifted left or right
+        # To avoid out of bound, shape will be shifted left or right
         if not self.in_bound("LEFT"):
-            y = self.curr_block.get_sides()[2]
+            y = self.curr_shape.get_sides()[2]
         elif not self.in_bound("RIGHT"):
-            y = self.cols - self.curr_block.get_sides()[3] - 1
+            y = self.cols - self.curr_shape.get_sides()[3] - 1
 
-        self.place_block(self.curr_block, x, y)
+        self.place_shape(self.curr_shape, x, y)
 
