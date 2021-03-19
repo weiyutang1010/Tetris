@@ -205,3 +205,35 @@ class Board:
 
         self.place_shape(self.curr_shape, x, y)
 
+    def is_row_full(self, row):
+        """Check if the row is full
+
+        Parameters
+        ----------
+            row: int
+                the index of the row
+
+        Returns
+        ----------
+            boolean
+                True if row is full. False otherwise.
+        """
+        BLACK = (0, 0, 0)
+
+        for color in self.board[row]:
+            if color == BLACK:
+                return False
+        return True
+
+    def render_row_black(self, row):
+        """Render the row of the board black
+
+        Parameters
+        ----------
+            row: int
+                the index of the row
+        """
+        BLACK = (0, 0, 0)
+
+        for col in range(len(self.board[row])):
+            self.board[row][col] = BLACK
