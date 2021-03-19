@@ -16,14 +16,14 @@ pygame.display.set_caption("Tetris!")
 
 # Pygame FPS
 clock = pygame.time.Clock()
-FPS = 12
+FPS = 14
 
 # Initialize Board
 myGame = game.Game(surface=WIN)
 
 # Events
 MOVE_DOWN = USEREVENT + 1
-pygame.time.set_timer(MOVE_DOWN, 400)
+pygame.time.set_timer(MOVE_DOWN, 300)
 
 
 run = True
