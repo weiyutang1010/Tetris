@@ -131,6 +131,27 @@ class Game():
                 self.bottom_time = time.time_ns()
         return False
 
+    def remove_full_lines(self):
+        """Clear lines that are full
+        
+        Return
+        ---------
+            int
+                number of lines that are cleared
+        """
+        BLACK = (0, 0, 0)
+        line_count = 0
+
+        # for every row, check if the row is full
+        for i in range(self.board_size[0]):
+            is_full = self.gameBoard.is_row_full(i)
+            
+            if is_full:
+                line_count += 1
+                self.gameBoard.render_row_black(i)
+
+        return line_count
+
     def render_game(self):
         """Render main and display boards"""
         self.shapeDisplay._render_blocks()
