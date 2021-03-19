@@ -1,13 +1,16 @@
-class Block:
+class Shape:
+    """A class used to represent the shape
+
+    Attributes
+    ----------
+        color: 1 x 3 int tuple
+            RGB values of the shape
+        loc_center: 1 x 2 int tuple
+            x, y coordinates of the center of the shape
+        shape: list of 1 x 2 tuples
+            coordinate from center to that is still part of the shape
+    """
     def __init__(self):
-        """
-            color: 1 x 3 int tuple
-                RGB values of the block
-            loc_center: 1 x 2 int tuple
-                x, y coordinates of the block
-            shape: list of 1 x 2 tuples
-                coordinate from center to render the block
-        """
         self.color = (0, 0, 0)
         self.loc_center = (0, 0)
         self.shape = []
@@ -47,7 +50,7 @@ class Block:
             self.shape[i] = (x, y)
 
 
-class Z_shape(Block):
+class Z_shape(Shape):
     def __init__(self):
         self.color = (252,61,50)
         self.loc_center = (0, 0)
@@ -58,7 +61,7 @@ class Z_shape(Block):
             (1, 1)
         ]
 
-class S_shape(Block):
+class S_shape(Shape):
     def __init__(self):
         self.color = (57,255,20)
         self.loc_center = (0, 0)
@@ -69,7 +72,7 @@ class S_shape(Block):
             (1, -1)
         ]
         
-class L_shape(Block):
+class L_shape(Shape):
     def __init__(self):
         self.color = (255,191,0)
         self.loc_center = (0, 0)
@@ -80,7 +83,7 @@ class L_shape(Block):
             (1, 1)
         ]
 
-class L_shape_mirror(Block):
+class L_shape_mirror(Shape):
     def __init__(self):
         self.color = (173,216,230)
         self.loc_center = (0, 0)
@@ -91,7 +94,7 @@ class L_shape_mirror(Block):
             (1, -1)
         ]
 
-class T_shape(Block):
+class T_shape(Shape):
     def __init__(self):
         self.color = (255,255,0)
         self.loc_center = (0, 0)
@@ -102,7 +105,7 @@ class T_shape(Block):
             (0, 1)
         ]
         
-class Square_shape(Block):
+class Square_shape(Shape):
     def __init__(self):
         self.color = (139,0,139)
         self.loc_center = (0, 0)
@@ -115,7 +118,7 @@ class Square_shape(Block):
     def rotate(self):
         return
 
-class Line_shape(Block):
+class Line_shape(Shape):
     def __init__(self):
         self.color = (0,0,220)
         self.loc_center = (0, 0)
