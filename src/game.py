@@ -27,7 +27,7 @@ class Game():
             block.Line_shape()
         ]
         self.last_time = 0
-        self.interval = 0.8E8
+        self.interval = 1.6E8
 
     def display_cur_block(self):
         if not self.cur_block: return
