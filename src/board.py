@@ -51,10 +51,17 @@ class Board:
         """Place the center of the shape at (x, y)"""
         shape.set_loc_center(x, y)
         self.curr_shape = shape
+        occupied = False
 
         # Fill in color of the given shape
         for i, j in shape.get_shape():
-            self.board[x + i][y + j] = shape.get_color()
+            if self.board[x + i][y + j] != (0,0,0):
+                occupied = True
+                break
+
+        if not occupied:
+            for i,j in shape.get_shape():
+                self.board[x + i][y + j] = shape.get_color()
 
     def reset_curr_shape(self):
         """Remove current shape from the board"""
@@ -237,3 +244,14 @@ class Board:
 
         for col in range(len(self.board[row])):
             self.board[row][col] = BLACK
+
+    def lose_game(self):
+        col_filled = [True] * len(self.board[0])
+
+        for row in range(len(self.board)):
+            for col in range(len(self.board[0])):
+                if col_filled[col]: col_filled[col] = (self.board[row][col] != (0,0,0))
+
+        for col in col_filled:
+            if col: return True
+        return False
