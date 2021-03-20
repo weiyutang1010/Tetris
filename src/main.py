@@ -34,7 +34,9 @@ while run:
         elif event.type == MOVE_DOWN:
             myGame.gameBoard.move_curr_shape("DOWN")
     
-    if (myGame.shape_at_bottom()):
+    if myGame.gameBoard.lose_game():
+        myGame.quit()
+    elif myGame.shape_at_bottom():
         myGame.remove_full_lines()
         myGame.drop_random_shape()
     else:
