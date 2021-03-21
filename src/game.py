@@ -52,6 +52,7 @@ class Game():
         board_start: 1 x 2 int tuple, optional
             starting coordinates of the board
         """
+        self.surface = surface
         self.board_size = board_size
         self.gameBoard = board.Board(*board_size, block_size, surface, *board_start)
         self.shapeDisplay = board.Board(8, 8, 30, surface, 560, 100)
@@ -66,6 +67,11 @@ class Game():
             shape.Square_shape(),
             shape.Line_shape()
         ]
+        # Scores
+        self.score = 0
+        self.textColor = (220, 20, 60)
+        self.gameFont = pygame.font.SysFont('arialblack', 40)
+        self.scoreSurface = self.gameFont.render('Score: 0', False, self.textColor)
 
         # Time and Intervals
         self.last_time = 0
@@ -159,10 +165,16 @@ class Game():
                 line_count += 1
                 self.gameBoard.render_row_black(i)
 
+        self.update_score(line_count * 10)
         return line_count
+
+    def update_score(self, score):
+        self.score += score
+        self.scoreSurface = self.gameFont.render('Score: {}'.format(self.score), False, self.textColor)
 
     def render_game(self):
         """Render main and display boards"""
+        self.surface.blit(self.scoreSurface, (20,20))
         self.shapeDisplay._render_blocks()
         self.gameBoard._render_blocks()
 
