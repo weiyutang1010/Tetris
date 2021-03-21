@@ -13,6 +13,9 @@ WIDTH, HEIGHT = 880, 800
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Tetris!")
 
+# Pygame Text
+pygame.font.init()
+
 # Pygame FPS
 clock = pygame.time.Clock()
 FPS = 24
@@ -22,7 +25,7 @@ myGame = game.Game(surface=WIN)
 
 # Events
 MOVE_DOWN = USEREVENT + 1
-pygame.time.set_timer(MOVE_DOWN, 500)
+pygame.time.set_timer(MOVE_DOWN, 600)
 
 
 run = True
