@@ -48,7 +48,22 @@ class Board:
         self.curr_shape = shape.Shape()
 
     def place_shape(self, shape, x, y):
-        """Place the center of the shape at (x, y)"""
+        """Place the center of the shape at (x, y)
+        
+        Parameters
+        ----------
+            shape: Shape object
+                shape to be placed on the board
+            x: int
+                x coordinate of the board to place the block
+            y: int
+                y coordinate of the board to place the block
+
+        Return
+        ---------
+            boolean
+                True if the provided location is already occupied. False otherwise.
+        """
         shape.set_loc_center(x, y)
         self.curr_shape = shape
         occupied = False
@@ -59,9 +74,10 @@ class Board:
                 occupied = True
                 break
 
-        if not occupied:
-            for i,j in shape.get_shape():
-                self.board[x + i][y + j] = shape.get_color()
+        for i,j in shape.get_shape():
+            self.board[x + i][y + j] = shape.get_color()
+        
+        return occupied
 
     def reset_curr_shape(self):
         """Remove current shape from the board"""
@@ -142,14 +158,15 @@ class Board:
                 y - left + j >= 0 and 
                 y + right + j < self.cols)
 
-    def not_blocked(self, command):
+    def not_blocked(self, command=""):
         """ Check if the current shape is blocked by another 
             shape in the specified direction
 
         Parameters
         -----------
-            command: str
-                takes in "UP", "DOWN", "LEFT", "RIGHT"
+            command: str, optional
+                takes in "UP", "DOWN", "LEFT", "RIGHT" (default check 
+                current position)
         
         Return
         -----------
@@ -165,8 +182,9 @@ class Board:
 
         # Find all coordinates of the current shape
         coordinates = {}
-        for a, b in shape.get_shape():
-            coordinates[(x + a, y + b)] = 1
+        if command != "":
+            for a, b in shape.get_shape():
+                coordinates[(x + a, y + b)] = 1
 
         for a, b in shape.get_shape():
             if (x + a + i, y + j + b) in coordinates:
