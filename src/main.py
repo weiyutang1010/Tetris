@@ -2,6 +2,7 @@ import pygame
 import os
 from pygame.constants import USEREVENT
 import game
+import time
 
 # Color Constant
 WHITE = (255, 255, 255)
@@ -21,7 +22,7 @@ myGame = game.Game(surface=WIN)
 
 # Events
 MOVE_DOWN = USEREVENT + 1
-pygame.time.set_timer(MOVE_DOWN, 350)
+pygame.time.set_timer(MOVE_DOWN, 500)
 
 
 run = True
@@ -34,11 +35,10 @@ while run:
         elif event.type == MOVE_DOWN:
             myGame.gameBoard.move_curr_shape("DOWN")
     
-    if myGame.gameBoard.lose_game():
-        myGame.quit()
-    elif myGame.shape_at_bottom():
+    if myGame.shape_at_bottom():
         myGame.remove_full_lines()
-        myGame.drop_random_shape()
+        # user lose when new shape is occupied
+        run = not myGame.drop_random_shape()
     else:
         run = myGame.shape_movement()
     
@@ -46,4 +46,6 @@ while run:
     myGame.render_game()
     pygame.display.update()
 
+# pause for 2 second before quit
+time.sleep(2)
 myGame.quit()

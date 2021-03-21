@@ -69,7 +69,12 @@ class Game():
 
         # Time and Intervals
         self.last_time = 0
-        self.interval = 1.6E8
+        self.interval = 1.0E8
+
+        # interval for falling
+        self.last_fall_time = 0
+        self.fall_interval = 0.6E8
+
         self.flag = False
         self.bottom_time = 0
         self.bottom_duration = 3E8
@@ -90,18 +95,16 @@ class Game():
         choice = random.randint(0, count-1)
         self.curr_shape = choice
         pos = (self.shapes[choice].get_sides()[0], self.board_size[1]//2)
-        self.gameBoard.place_shape(self.shapes[choice], *pos)
+        occupied = self.gameBoard.place_shape(self.shapes[choice], *pos)
         self.display_curr_shape()
+        return occupied
 
     def shape_movement(self):
         """Move the shape based on key pressed"""
+        keys_pressed = pygame.key.get_pressed()
         if time.time_ns() > self.last_time + self.interval:
-            keys_pressed = pygame.key.get_pressed()
             if keys_pressed[pygame.K_UP]:
                 self.gameBoard.rotate_curr_shape()
-                self.last_time = time.time_ns()
-            elif keys_pressed[pygame.K_DOWN] and self.gameBoard.in_bound():
-                self.gameBoard.move_curr_shape("DOWN")
                 self.last_time = time.time_ns()
             elif keys_pressed[pygame.K_LEFT]:
                 self.gameBoard.move_curr_shape("LEFT")
@@ -111,6 +114,12 @@ class Game():
                 self.last_time = time.time_ns()
             elif keys_pressed[pygame.K_ESCAPE]:
                 return False
+
+        if time.time_ns() > self.last_fall_time + self.fall_interval:
+            if keys_pressed[pygame.K_DOWN] and self.gameBoard.in_bound():
+                self.gameBoard.move_curr_shape("DOWN")
+                self.last_fall_time = time.time_ns()
+        
         return True
     
     def shape_at_bottom(self):
