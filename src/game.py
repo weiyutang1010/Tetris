@@ -77,13 +77,14 @@ class Game():
         self.last_time = 0
         self.interval = 1.0E8
 
-        # interval for falling
+        # Interval for falling
         self.last_fall_time = 0
         self.fall_interval = 0.6E8
 
+        # Interval for sliding
         self.flag = False
         self.bottom_time = 0
-        self.bottom_duration = 3E8
+        self.bottom_duration = 2E8
 
     def display_curr_shape(self):
         """Display the current falling shape"""
