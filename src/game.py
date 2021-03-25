@@ -79,12 +79,12 @@ class Game():
 
         # Interval for falling
         self.last_fall_time = 0
-        self.fall_interval = 0.6E8
+        self.fall_interval = 0.8E8
 
         # Interval for sliding
         self.flag = False
         self.bottom_time = 0
-        self.bottom_duration = 2E8
+        self.bottom_duration = 2.5E8
 
     def display_curr_shape(self):
         """Display the current falling shape"""
@@ -123,7 +123,7 @@ class Game():
                 return False
 
         if time.time_ns() > self.last_fall_time + self.fall_interval:
-            if keys_pressed[pygame.K_DOWN] and self.gameBoard.in_bound():
+            if keys_pressed[pygame.K_DOWN] and self.gameBoard.in_bound(self.gameBoard.curr_shape):
                 self.gameBoard.move_curr_shape("DOWN")
                 self.last_fall_time = time.time_ns()
         
@@ -170,6 +170,7 @@ class Game():
         return line_count
 
     def update_score(self, score):
+        """Add the score to the current score of the game"""
         self.score += score
         self.scoreSurface = self.gameFont.render('Score: {}'.format(self.score), False, self.textColor)
 

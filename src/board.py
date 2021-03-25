@@ -1,5 +1,6 @@
 import pygame
 import shape
+from copy import deepcopy
 
 class Board:
     """A class used to represent the board
@@ -135,11 +136,14 @@ class Board:
         else:
             return (0, 0)
 
-    def in_bound(self, command=""):
+    def in_bound(self, shape, command=""):
         """Check if moving in the direction causes out of bound
 
         Parameters
         -----------
+            shape: class Shape()
+                The shape block to be checked
+
             command: str, optional
                 takes in "UP", "DOWN", "LEFT", "RIGHT" (default check 
                 current position)
@@ -151,14 +155,14 @@ class Board:
                 False otherwise
         """
         i, j = self.get_direction(command)
-        x, y = self.curr_shape.get_loc_center()
-        up, down, left, right = self.curr_shape.get_sides() 
+        x, y = shape.get_loc_center()
+        up, down, left, right = shape.get_sides() 
         return  (x - up + i >= 0 and 
                 x + down + i < self.rows and 
                 y - left + j >= 0 and 
                 y + right + j < self.cols)
 
-    def not_blocked(self, command=""):
+    def not_blocked(self, shape, command=""):
         """ Check if the current shape is blocked by another 
             shape in the specified direction
 
@@ -176,7 +180,6 @@ class Board:
         """
         BLACK = (0, 0, 0)
 
-        shape = self.curr_shape
         i, j = self.get_direction(command)
         x, y = shape.get_loc_center()
 
@@ -206,29 +209,63 @@ class Board:
         i, j = self.get_direction(command)
         x, y = self.curr_shape.get_loc_center()
 
-        if (self.in_bound(command) and self.not_blocked(command)):
+        if (self.in_bound(shape, command) and self.not_blocked(shape, command)):
             self.reset_curr_shape() # Remove current shape
             self.curr_shape.set_loc_center(x + i, y + j) # Update center location
             self.place_shape(shape, x + i, y + j) # Render new shape
 
     def at_bottom(self):
         """Check if the shape can still move bottom"""
-        return not self.in_bound("DOWN") or not self.not_blocked("DOWN")
+        return (not self.in_bound(self.curr_shape, "DOWN") or 
+                not self.not_blocked(self.curr_shape, "DOWN"))
+
+    def shift_horizontal(self, shape):
+        """Shift the block horizontally to avoid out of bound"""
+        x, y = shape.get_loc_center()
+        if not self.in_bound(shape, "LEFT"):
+            y = shape.get_sides()[2]
+        elif not self.in_bound(shape, "RIGHT"):
+            y = self.cols - shape.get_sides()[3] - 1
+        return (x, y)
+
+    def not_blocked_2(self, shape, shape2, command=""):
+        BLACK = (0, 0, 0)
+
+        i, j = self.get_direction(command)
+        x, y = shape.get_loc_center()
+
+        # Find all coordinates of the current shape
+        coordinates = {}
+        x2, y2 = shape2.get_loc_center()
+        for a, b in shape2.get_shape():
+            coordinates[(x2 + a, y2 + b)] = 1
+
+        for a, b in shape.get_shape():
+            if (x + a + i, y + j + b) in coordinates:
+                # skip if the coordinate is part of current shape
+                continue
+            elif  self.board[x + a + i][y + j + b] != BLACK:
+                return False
+        return True
 
     def rotate_curr_shape(self):
         """Rotate current shape 90 deg clockwise"""
         x, y = self.curr_shape.get_loc_center()
+        shape = deepcopy(self.curr_shape)
+
+        # Stop rotation if the rotated shape collide with another shape
+        shape.rotate()
+        shape.set_loc_center(*self.shift_horizontal(shape))
+        if not self.not_blocked_2(shape, self.curr_shape):
+            return
 
         self.reset_curr_shape()
         self.curr_shape.rotate()
 
         # To avoid out of bound, shape will be shifted left or right
-        if not self.in_bound("LEFT"):
-            y = self.curr_shape.get_sides()[2]
-        elif not self.in_bound("RIGHT"):
-            y = self.cols - self.curr_shape.get_sides()[3] - 1
-
-        self.place_shape(self.curr_shape, x, y)
+        new_x, new_y = self.shift_horizontal(self.curr_shape)
+        self.curr_shape.set_loc_center(new_x, new_y)
+        self.place_shape(self.curr_shape, new_x, new_y)
 
     def is_row_full(self, row):
         """Check if the row is full
