@@ -300,6 +300,17 @@ class Board:
         for col in range(len(self.board[row])):
             self.board[row][col] = BLACK
 
+    def shift_down(self, start_index):
+        """Shift all color blocks above the index down by 1 block"""
+        BLACK = (0, 0, 0)
+
+        for i in range(start_index, 0, -1):
+            for j in range(0, self.cols):
+                if self.board[i][j] != BLACK:
+                    self.board[i + 1][j] = self.board[i][j]
+                    self.board[i][j] = BLACK
+        return
+
     def lose_game(self):
         col_filled = [True] * len(self.board[0])
 

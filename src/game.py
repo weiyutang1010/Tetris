@@ -155,7 +155,6 @@ class Game():
             int
                 number of lines that are cleared
         """
-        BLACK = (0, 0, 0)
         line_count = 0
 
         # for every row, check if the row is full
@@ -165,6 +164,7 @@ class Game():
             if is_full:
                 line_count += 1
                 self.gameBoard.render_row_black(i)
+                self.gameBoard.shift_down(i)
 
         self.update_score(line_count * 10)
         return line_count
