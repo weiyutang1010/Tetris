@@ -119,6 +119,10 @@ class Game():
             elif keys_pressed[pygame.K_RIGHT]:
                 self.gameBoard.move_curr_shape("RIGHT")
                 self.last_time = time.time_ns()
+            elif keys_pressed[pygame.K_SPACE]:
+                while not self.gameBoard.at_bottom():
+                    self.gameBoard.move_curr_shape("DOWN")
+                self.last_time = time.time_ns()
             elif keys_pressed[pygame.K_ESCAPE]:
                 return False
 
